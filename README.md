@@ -1,7 +1,13 @@
 # foxmemory-infer
 
-Initial scaffold for Foxlight Foundation memory infrastructure.
+Inference service for memory embeddings.
 
-## Status
+## API
+- `GET /health`
+- `POST /embed` with `{ "texts": ["..."] }`
 
-Scaffolded v0.
+## Run locally
+```bash
+pip install -r requirements.txt
+PYTHONPATH=src uvicorn foxmemory_infer.main:app --reload --port 8081
+```
