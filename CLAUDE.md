@@ -1,6 +1,7 @@
-# CLAUDE.md (Claude Code guidance)
+# CLAUDE.md
 
-When editing this repo:
-- Read `AGENTS.md` first.
-- Do not change endpoint paths without updating docs + tests.
-- Prefer minimal, reviewable commits.
+Primary instructions live in `AGENTS.md`.
+
+Before making changes:
+1. Read `AGENTS.md`
+2. Follow its rules and PR checklist

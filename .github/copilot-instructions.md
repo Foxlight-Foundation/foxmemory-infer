@@ -1,8 +1,8 @@
-# GitHub Copilot Instructions
+# Copilot Instructions
 
-This project is an inference microservice for embeddings.
+Canonical project rules are in `AGENTS.md`.
 
-Guidelines:
-- Avoid adding storage/database code.
-- Keep endpoint contracts backward-compatible.
-- Generate tests for API behavior.
+When proposing code:
+- follow `AGENTS.md` constraints
+- preserve contract stability
+- update tests/docs with behavior changes

@@ -56,3 +56,7 @@ docker run --rm -p 8081:8081 foxmemory-infer:dev
 - `docs/ARCHITECTURE.md`
 - `docs/OPERATIONS.md`
 - `AGENTS.md` (automation/agent guidance)
+## Automation note
+Agent tooling should read `AGENTS.md` first.
+If your tool supports custom instruction files, point it to `AGENTS.md` as the canonical source.
+

@@ -1,5 +1,7 @@
-# CODEX.md (Codex/Coding agent guidance)
+# CODEX.md
 
-- Keep changes small and test-backed.
-- Preserve `/health` and `/embed` compatibility.
-- Run tests before proposing completion.
+Primary instructions live in `AGENTS.md`.
+
+Before making changes:
+1. Read `AGENTS.md`
+2. Follow its rules and PR checklist
