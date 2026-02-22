@@ -1,0 +1,10 @@
+---
+description: Rules for Cursor in foxmemory-infer
+globs:
+  - "src/**/*.py"
+  - "tests/**/*.py"
+alwaysApply: true
+---
+- Keep infer stateless.
+- Preserve `/health` and `/embed` routes.
+- Update tests with behavior changes.
