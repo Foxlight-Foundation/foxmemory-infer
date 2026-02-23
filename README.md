@@ -1,62 +1,30 @@
 # foxmemory-infer
 
-Local-first embedding inference service for FoxMemory.
+Node.js + TypeScript embedding inference service.
 
-## Why this exists
-`foxmemory-infer` provides a reproducible, containerized service that converts text into vectors for semantic retrieval.
+## Purpose
+Provides a simple embedding API for FoxMemory deployments, preferring local Ollama embeddings with a deterministic fallback for dev resilience.
 
-Goals:
-- run on user-owned infra (Mini, homelab, cloud VM)
-- avoid mandatory external API costs
-- provide a stable API contract for `foxmemory-store`
-
-## What it does
-- Exposes HTTP endpoints for health and embedding.
-- Normalizes requests into a provider-agnostic interface.
-- In scaffold mode, returns deterministic placeholder vectors (for integration testing).
-
-## Current API
+## API
 - `GET /health`
-- `POST /embed` with payload:
+- `POST /embed` with `{ "texts": ["..."] }`
 
-```json
-{ "texts": ["hello", "world"] }
-```
+## Environment
+- `PORT` (default `8081`)
+- `OLLAMA_BASE_URL` (default `http://localhost:11434`)
+- `OLLAMA_EMBED_MODEL` (default `nomic-embed-text`)
 
-Response shape:
-
-```json
-{
-  "vectors": [[5.0, 532.0], [5.0, 552.0]],
-  "model": "scaffold-local"
-}
-```
-
-## Local usage
+## Local run
 ```bash
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-PYTHONPATH=src gunicorn --bind 0.0.0.0:8081 foxmemory_infer.main:app
+npm install
+npm run dev
 ```
 
-## Container usage
+## Build + start
 ```bash
-docker build -t foxmemory-infer:dev .
-docker run --rm -p 8081:8081 foxmemory-infer:dev
+npm run build
+npm start
 ```
 
-## Roadmap
-- Ollama provider adapter
-- optional reranker endpoint
-- batching + rate limits
-- authn/authz between infer and store
-
-## Docs
-- `docs/ARCHITECTURE.md`
-- `docs/OPERATIONS.md`
-- `AGENTS.md` (automation/agent guidance)
-## Automation note
-Agent tooling should read `AGENTS.md` first.
-If your tool supports custom instruction files, point it to `AGENTS.md` as the canonical source.
-
+## Notes
+If Ollama is unavailable, service returns deterministic fallback vectors for integration testing.
