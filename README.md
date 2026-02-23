@@ -1,31 +1,97 @@
 # foxmemory-infer
 
-Node.js + TypeScript inference service with OpenAI-compatible API endpoints.
+OpenAI-compatible inference shim for local-first AI memory stacks.
 
-## Purpose
-Provides local-first inference for FoxMemory. It can run with Ollama and present OpenAI-compatible endpoints so `foxmemory-store` (or other clients) can swap between local and external providers.
+If you are new: think of this as a translator. It lets local inference backends (like Ollama) look like OpenAI APIs so other tools can integrate with minimal code changes.
 
-## API
+## Why this exists
+
+- Many memory/agent frameworks expect OpenAI-style endpoints
+- Local model runtimes often use different APIs
+- This service normalizes those differences
+
+## What it provides
+
 - `GET /health`
-- `POST /embed` (legacy convenience)
+- `POST /embed` (legacy helper)
 - `POST /v1/embeddings` (OpenAI-compatible)
 - `POST /v1/chat/completions` (OpenAI-compatible)
 
-## Environment
-- `PORT` (default `8081`)
-- `OLLAMA_BASE_URL` (default `http://localhost:11434`)
-- `OLLAMA_EMBED_MODEL` (default `nomic-embed-text`)
-- `OLLAMA_CHAT_MODEL` (default `llama3.1:8b`)
-- `INFER_API_KEY` (optional Bearer token auth)
+## How it works
 
-## Local run
+- For embeddings: forwards to Ollama `/api/embeddings`
+- For chat: forwards to Ollama `/api/chat`
+- If embedding call fails, returns a deterministic fallback embedding (for scaffolding only)
+
+---
+
+## Requirements
+
+- Node.js 22+
+- npm 10+
+- Optional: Ollama running locally or reachable remotely
+
+## Quick start
+
 ```bash
 npm install
 npm run dev
 ```
 
-## Build + start
+Health:
+
+```bash
+curl -s http://localhost:8081/health | jq .
+```
+
+---
+
+## Configuration
+
+- `PORT` (default `8081`)
+- `OLLAMA_BASE_URL` (default `http://localhost:11434`)
+- `OLLAMA_EMBED_MODEL` (default `nomic-embed-text`)
+- `OLLAMA_CHAT_MODEL` (default `llama3.1:8b`)
+- `INFER_API_KEY` (optional bearer token for endpoint protection)
+
+If `INFER_API_KEY` is set, clients must send:
+
+```http
+Authorization: Bearer <INFER_API_KEY>
+```
+
+---
+
+## Example calls
+
+### Embeddings (OpenAI-compatible)
+
+```bash
+curl -s http://localhost:8081/v1/embeddings \
+  -H 'content-type: application/json' \
+  -d '{"model":"nomic-embed-text","input":["fox","memory"]}'
+```
+
+### Chat completions (OpenAI-compatible)
+
+```bash
+curl -s http://localhost:8081/v1/chat/completions \
+  -H 'content-type: application/json' \
+  -d '{
+    "model":"llama3.1:8b",
+    "messages":[{"role":"user","content":"Say hi in one sentence."}]
+  }'
+```
+
+---
+
+## Build + run
+
 ```bash
 npm run build
 npm start
 ```
+
+## License
+
+MIT (see `LICENSE`)
